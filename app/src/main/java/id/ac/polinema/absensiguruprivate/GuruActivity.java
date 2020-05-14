@@ -37,7 +37,7 @@ public class GuruActivity extends AppCompatActivity {
     private ImageView profil;
     private TextView id_guru, nama, alamat, jenis_kelamin, no_telp, username, password;
     private Session session;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +98,11 @@ public class GuruActivity extends AppCompatActivity {
 
                     for (AbsenItem item : absenItems) {
                         absen.add(new AbsenItem(item.getUsername(), item.getPassword(), item.getJam_login(),
-                                item.getJam_logout(), item.getTanggal()));
+                                item.getJam_logout(), item.getTanggal(), item.getLokasi_latitude(), item.getLokasi_longitude()));
                     }
+
+                    absen.add(new AbsenItem(session.getUsername(), session.getPassword(), session.getLoginTime(),
+                            session.getLogoutTime(), session.getDate(), session.getLocLatitude(), session.getLocLongitude()));
 
                     itemAdapter.add(absen);
                     absenView.setAdapter(fastAdapter);
@@ -133,10 +136,12 @@ public class GuruActivity extends AppCompatActivity {
                 String jam_login = session.getLoginTime();
                 String jam_logout = session.getLogoutTime();
                 String tanggal = session.getDate();
+                double lokasi_latitude = session.getLocLatitude();
+                double lokasi_longitude = session.getLocLongitude();
 
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-                Call<ResponseBody> call = apiInterface.absenGuru(new AbsenItem(username, password, jam_login, jam_logout, tanggal));
+                Call<ResponseBody> call = apiInterface.absenGuru(new AbsenItem(username, password, jam_login, jam_logout, tanggal, lokasi_latitude, lokasi_longitude));
 
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override

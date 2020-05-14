@@ -50,17 +50,20 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<GuruItem>> call, Response<List<GuruItem>> response) {
                 List<GuruItem> guruItems = response.body();
+                if (response.isSuccessful()) {
+                    for (GuruItem item : guruItems) {
+                        guru.add(new GuruItem(item.getId_guru(), item.getNama(), item.getAlamat(), item.getJenis_kelamin(),
+                                item.getNo_telp(), item.getFoto(), item.getUsername(), item.getPassword()));
+                    }
 
-                for (GuruItem item : guruItems) {
-                    guru.add(new GuruItem(item.getId_guru(), item.getNama(), item.getAlamat(), item.getJenis_kelamin(),
-                            item.getNo_telp(), item.getFoto(), item.getUsername(), item.getPassword()));
+                    itemAdapter.add(guru);
+                    guruView.setAdapter(fastAdapter);
+
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    guruView.setLayoutManager(layoutManager);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Gagal menampilkan data", Toast.LENGTH_SHORT).show();
                 }
-
-                itemAdapter.add(guru);
-                guruView.setAdapter(fastAdapter);
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                guruView.setLayoutManager(layoutManager);
             }
 
             @Override
