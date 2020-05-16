@@ -5,6 +5,7 @@ import java.util.Map;
 
 import id.ac.polinema.absensiguruprivate.model.AbsenItem;
 import id.ac.polinema.absensiguruprivate.model.GuruItem;
+import id.ac.polinema.absensiguruprivate.model.SiswaItem;
 import id.ac.polinema.absensiguruprivate.model.User;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -25,13 +26,19 @@ public interface ApiInterface {
     @POST("loginGuru")
     Call<ResponseBody> loginGuru(@Body User user);
 
-    @GET("guru")
+    @GET("dataGuru")
     Call<List<GuruItem>> getGuru();
 
-    @GET("guru")
+    @GET("dataGuru")
     Call<List<GuruItem>> getGuruByUsername(
             @Query("username") String username
     );
+
+    @GET("dataSiswa")
+    Call<List<SiswaItem>> getSiswa();
+
+    @POST("dataSiswa")
+    Call<ResponseBody> tambahSiswa(@Body SiswaItem siswa);
 
     @GET("absenGuru")
     Call<List<AbsenItem>> getAbsenByUsername(
@@ -42,7 +49,7 @@ public interface ApiInterface {
     Call<ResponseBody> absenGuru(@Body AbsenItem absen);
 
     @Multipart
-    @POST("guru")
+    @POST("dataGuru")
     Call<ResponseBody> tambahGuru(
             @Part MultipartBody.Part photo,
             @PartMap Map<String, RequestBody> text);

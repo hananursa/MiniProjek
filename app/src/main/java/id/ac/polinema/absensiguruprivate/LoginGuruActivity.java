@@ -1,10 +1,6 @@
 package id.ac.polinema.absensiguruprivate;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,10 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import id.ac.polinema.absensiguruprivate.helper.Session;
 import id.ac.polinema.absensiguruprivate.model.User;
 import id.ac.polinema.absensiguruprivate.rest.ApiClient;
 import id.ac.polinema.absensiguruprivate.rest.ApiInterface;
-import id.ac.polinema.absensiguruprivate.helper.Session;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,6 +54,16 @@ public class LoginGuruActivity extends AppCompatActivity {
                 userLogin(inputUsername.getText().toString(), inputPassword.getText().toString());
             }
         });
+
+        if (session.getLoggedInstatus()) {
+            if (session.getLoggedInRole().equals("admin")) {
+                Intent intent = new Intent(getApplicationContext(), AdminActivity.class);
+                startActivity(intent);
+            } else if (session.getLoggedInRole().equals("guru")) {
+                Intent intent = new Intent(getApplicationContext(), GuruActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 
     private void userLogin(String username, String password) {
@@ -76,18 +81,9 @@ public class LoginGuruActivity extends AppCompatActivity {
                         String password = json.getJSONObject(0).getString("password");
                         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
                         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LoginGuruActivity.this);
-                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(LoginGuruActivity.this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-                                    session.setLocLatitude(location.getLatitude());
-                                    session.setLocLongitude(location.getLongitude());
-                                }
-                            }
-                        });
 
                         session.setLoggedInStatus(true);
+                        session.setLoggedInRole("guru");
                         session.setUsername(username);
                         session.setPassword(password);
                         session.setLoginTime(currentTime);

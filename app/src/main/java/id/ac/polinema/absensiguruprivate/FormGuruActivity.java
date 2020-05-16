@@ -1,23 +1,19 @@
 package id.ac.polinema.absensiguruprivate;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import id.ac.polinema.absensiguruprivate.model.User;
 import id.ac.polinema.absensiguruprivate.rest.ApiClient;
 import id.ac.polinema.absensiguruprivate.rest.ApiInterface;
 import okhttp3.MediaType;
@@ -36,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FormActivity extends AppCompatActivity {
+public class FormGuruActivity extends AppCompatActivity {
     private Button btnTambah, btnUpload;
     private EditText inputId, inputNama, inputAlamat, inputTelp, inputUsername, inputPassword;
     private RadioGroup radioGroup;
@@ -47,7 +42,7 @@ public class FormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form);
+        setContentView(R.layout.activity_form_guru);
 
         btnTambah = findViewById(R.id.btn_tambah_data_guru);
         btnUpload = findViewById(R.id.btn_upload_foto);
@@ -144,7 +139,7 @@ public class FormActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), AdminActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), FragmentDataGuru.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
@@ -161,6 +156,6 @@ public class FormActivity extends AppCompatActivity {
 
     private RequestBody createPartFromString(String description) {
         return RequestBody.create(
-                okhttp3.MultipartBody.FORM, description);
+                MultipartBody.FORM, description);
     }
 }

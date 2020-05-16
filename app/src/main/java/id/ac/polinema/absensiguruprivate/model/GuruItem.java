@@ -1,5 +1,7 @@
 package id.ac.polinema.absensiguruprivate.model;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import id.ac.polinema.absensiguruprivate.DetailAbsenActivity;
+import id.ac.polinema.absensiguruprivate.MapsActivity;
 import id.ac.polinema.absensiguruprivate.R;
 
 public class GuruItem extends AbstractItem<GuruItem, GuruItem.ViewHolder> {
@@ -100,7 +104,7 @@ public class GuruItem extends AbstractItem<GuruItem, GuruItem.ViewHolder> {
         }
 
         @Override
-        public void bindView(GuruItem item, List<Object> payloads) {
+        public void bindView(final GuruItem item, List<Object> payloads) {
             Picasso.get().load(item.getFoto()).into(profil);
             id_guru.setText(item.id_guru);
             nama.setText(item.nama);
@@ -109,6 +113,16 @@ public class GuruItem extends AbstractItem<GuruItem, GuruItem.ViewHolder> {
             no_telp.setText(item.no_telp);
             username.setText(item.username);
             password.setText(item.password);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = itemView.getContext();
+                    Intent intent = new Intent(context, DetailAbsenActivity.class);
+                    intent.putExtra("username", item.username);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
